@@ -94,10 +94,17 @@ public class PentahoGoogleSheetsPluginInputMeta extends BaseStepMeta implements 
 	
 	@Injection( name = "sampleFields", group = "INPUT_Fields" )
 	private Integer sampleFields;
-	
-	@InjectionDeep
+
+    /** proxy **/
+    @Injection( name = "proxyHost", group = "SHEET" )
+    private String proxyHost;
+
+    @Injection( name = "proxyPort", group = "SHEET" )
+    private String proxyPort;
+
+    @InjectionDeep
 	private PentahoGoogleSheetsPluginInputFields[] inputFields;
-	
+
     @Override
     public void setDefault() {   
         this.spreadsheetKey = "";
@@ -146,7 +153,24 @@ public class PentahoGoogleSheetsPluginInputMeta extends BaseStepMeta implements 
 	public void allocate(int nrfields) {
 	    inputFields = new PentahoGoogleSheetsPluginInputFields[nrfields];
 	}
-	
+
+    public void setProxyHost( String proxyHost ) {
+        this.proxyHost = proxyHost;
+    }
+
+    public String getProxyHost() {
+        return proxyHost;
+    }
+
+    public void setProxyPort( String proxyPort ) {
+        this.proxyPort = proxyPort;
+    }
+
+    public String getProxyPort() {
+        return this.proxyPort;
+    }
+
+
 
     @Override
     public Object clone() {
@@ -171,6 +195,9 @@ public class PentahoGoogleSheetsPluginInputMeta extends BaseStepMeta implements 
             xml.append(XMLHandler.addTagValue("worksheetId", this.worksheetId));
 			xml.append(XMLHandler.addTagValue("spreadsheetKey", this.spreadsheetKey));
      		xml.append(XMLHandler.addTagValue("jsonCredentialPath", this.jsonCredentialPath));
+            xml.append( XMLHandler.addTagValue( "proxyHost", proxyHost ) );
+            xml.append( XMLHandler.addTagValue( "proxyPort", proxyPort ) );
+
 			String tmp="100";
 			if(this.sampleFields!=null){
 				xml.append(XMLHandler.addTagValue("sampleFields", this.sampleFields.toString()));
@@ -216,6 +243,10 @@ public class PentahoGoogleSheetsPluginInputMeta extends BaseStepMeta implements 
             Node fields = XMLHandler.getSubNode(stepnode, "fields");
             int nrfields = XMLHandler.countNodes(fields, "field");
 
+            this.proxyHost = XMLHandler.getTagValue( stepnode, "proxyHost" );
+            this.proxyPort = XMLHandler.getTagValue( stepnode, "proxyPort" );
+
+
             allocate(nrfields);
 
             for ( int i = 0; i < nrfields; i++ ) {
@@ -254,6 +285,10 @@ public class PentahoGoogleSheetsPluginInputMeta extends BaseStepMeta implements 
 			this.sampleFields =(int) rep.getStepAttributeInteger(id_step, "sampleFields");
             int nrfields = rep.countNrStepAttributes(id_step, "field_name");
 
+            this.proxyHost = rep.getStepAttributeString( id_step, "proxyHost" );
+            this.proxyPort = rep.getStepAttributeString( id_step, "proxyPort" );
+
+
             allocate(nrfields);
 
             for ( int i = 0; i < nrfields; i++ ) {
@@ -287,8 +322,11 @@ public class PentahoGoogleSheetsPluginInputMeta extends BaseStepMeta implements 
             rep.saveStepAttribute(id_transformation, id_step, "worksheetId", this.worksheetId);
             rep.saveStepAttribute(id_transformation, id_step, "jsonCredentialPath", this.jsonCredentialPath);
             rep.saveStepAttribute(id_transformation, id_step, "sampleFields", this.sampleFields.toString());
+            rep.saveStepAttribute( id_transformation, id_step, "proxyHost", proxyHost );
+            rep.saveStepAttribute( id_transformation, id_step, "proxyPort", proxyPort );
 
-		    int nrfields = rep.countNrStepAttributes(id_step, "field_name");
+
+            int nrfields = rep.countNrStepAttributes(id_step, "field_name");
            
 		for ( int i = 0; i < inputFields.length; i++ ) {
 			PentahoGoogleSheetsPluginInputFields field = inputFields[i];

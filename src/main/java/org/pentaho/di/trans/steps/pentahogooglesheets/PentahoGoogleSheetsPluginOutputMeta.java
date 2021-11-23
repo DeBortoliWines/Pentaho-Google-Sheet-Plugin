@@ -101,7 +101,15 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
 	private Boolean create; 
 	
     @Injection( name = "Append", group = "SHEET" )
-	private Boolean append; 
+	private Boolean append;
+
+    /** proxy **/
+    @Injection( name = "proxyHost", group = "SHEET" )
+    private String proxyHost;
+
+    @Injection( name = "proxyPort", group = "SHEET" )
+    private String proxyPort;
+
 		
     @Override
     public void setDefault() {   
@@ -174,6 +182,23 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
         this.worksheetId = id;
     }
 
+    public void setProxyHost( String proxyHost ) {
+        this.proxyHost = proxyHost;
+    }
+
+    public String getProxyHost() {
+        return proxyHost;
+    }
+
+    public void setProxyPort( String proxyPort ) {
+        this.proxyPort = proxyPort;
+    }
+
+    public String getProxyPort() {
+        return this.proxyPort;
+    }
+
+
     @Override
     public Object clone() {
         PentahoGoogleSheetsPluginOutputMeta retval = (PentahoGoogleSheetsPluginOutputMeta) super.clone();
@@ -198,6 +223,9 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
             xml.append(XMLHandler.addTagValue( "APPEND", Boolean.toString(this.append)));
 			xml.append(XMLHandler.addTagValue("SHAREEMAIL", this.shareEmail));	
             xml.append(XMLHandler.addTagValue("SHAREDOMAIN", this.shareDomain));
+            xml.append( XMLHandler.addTagValue( "proxyHost", proxyHost ) );
+            xml.append( XMLHandler.addTagValue( "proxyPort", proxyPort ) );
+
         } catch (Exception e) {
             throw new KettleValueException("Unable to write step to XML", e);
         }
@@ -214,6 +242,8 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
 			this.append= Boolean.parseBoolean( XMLHandler.getTagValue( stepnode,"APPEND" ));
 			this.shareEmail= XMLHandler.getTagValue(stepnode,"SHAREEMAIL" );
             this.shareDomain= XMLHandler.getTagValue(stepnode,"SHAREDOMAIN" );
+            this.proxyHost = XMLHandler.getTagValue( stepnode, "proxyHost" );
+            this.proxyPort = XMLHandler.getTagValue( stepnode, "proxyPort" );
 
         } catch (Exception e) {
             throw new KettleXMLException("Unable to load step from XML", e);
@@ -231,6 +261,8 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
 			this.shareDomain=rep.getStepAttributeString(id_step, "SHAREDOMAIN");
 			this.create=Boolean.parseBoolean( rep.getStepAttributeString( id_step, "CREATE" ));
 			this.append=Boolean.parseBoolean( rep.getStepAttributeString( id_step, "APPEND" ));
+            this.proxyHost = rep.getStepAttributeString( id_step, "proxyHost" );
+            this.proxyPort = rep.getStepAttributeString( id_step, "proxyPort" );
 
        
         } catch (Exception e) {
@@ -256,6 +288,9 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
 			if ( this.append != null ) {
               rep.saveStepAttribute( id_transformation, id_step, "APPEND", this.append );
 			}
+            rep.saveStepAttribute( id_transformation, id_step, "proxyHost", proxyHost );
+            rep.saveStepAttribute( id_transformation, id_step, "proxyPort", proxyPort );
+
         } catch (Exception e) {
             throw new KettleException("Unable to save step information to the repository for id_step=" + id_step, e);
         }

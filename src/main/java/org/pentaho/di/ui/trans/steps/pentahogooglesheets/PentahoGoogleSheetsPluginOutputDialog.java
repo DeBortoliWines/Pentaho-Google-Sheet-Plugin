@@ -95,7 +95,14 @@ public class PentahoGoogleSheetsPluginOutputDialog extends BaseStepDialog implem
 	private TextVar shareDomain;
     private Button create;
 	private Button append;
-	
+
+    private Label wlProxyHost;
+    private TextVar wProxyHost;
+
+    private Label wlProxyPort;
+    private TextVar wProxyPort;
+
+
     public PentahoGoogleSheetsPluginOutputDialog(Shell parent, Object in, TransMeta transMeta, String name) {
         super(parent, (BaseStepMeta) in, transMeta, name);
         this.meta = (PentahoGoogleSheetsPluginOutputMeta) in;
@@ -234,6 +241,65 @@ public class PentahoGoogleSheetsPluginOutputDialog extends BaseStepDialog implem
         /*
          * END Service Account Tab
          */
+
+        // ////////////////////////
+        // START PROXY GROUP
+
+        Group gProxy = new Group( serviceAccountComposite, SWT.SHADOW_ETCHED_IN );
+        gProxy.setText( BaseMessages.getString( PKG, "PentahoGoogleSheetsPluginOutputDialog.ProxyGroup.Label" ) );
+        FormLayout proxyLayout = new FormLayout();
+        proxyLayout.marginWidth = 3;
+        proxyLayout.marginHeight = 3;
+        gProxy.setLayout( proxyLayout );
+        props.setLook( gProxy );
+
+        // HTTP Login
+        wlProxyHost = new Label( gProxy, SWT.RIGHT );
+        wlProxyHost.setText( BaseMessages.getString( PKG, "PentahoGoogleSheetsPluginOutputDialog.ProxyHost.Label" ) );
+        props.setLook( wlProxyHost );
+        FormData fdlProxyHost = new FormData();
+        fdlProxyHost.top = new FormAttachment( 0, margin );
+        fdlProxyHost.left = new FormAttachment( 0, 0 );
+        fdlProxyHost.right = new FormAttachment( middle, -margin );
+        wlProxyHost.setLayoutData( fdlProxyHost );
+        wProxyHost = new TextVar( transMeta, gProxy, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
+        wProxyHost.addModifyListener( modifiedListener );
+        wProxyHost.setToolTipText( BaseMessages.getString( PKG, "PentahoGoogleSheetsPluginOutputDialog.ProxyHost.Tooltip" ) );
+        props.setLook( wProxyHost );
+        FormData fdProxyHost = new FormData();
+        fdProxyHost.top = new FormAttachment( 0, margin );
+        fdProxyHost.left = new FormAttachment( middle, 0 );
+        fdProxyHost.right = new FormAttachment( 100, 0 );
+        wProxyHost.setLayoutData( fdProxyHost );
+
+        // HTTP Password
+        wlProxyPort = new Label( gProxy, SWT.RIGHT );
+        wlProxyPort.setText( BaseMessages.getString( PKG, "PentahoGoogleSheetsPluginOutputDialog.ProxyPort.Label" ) );
+        props.setLook( wlProxyPort );
+        FormData fdlProxyPort = new FormData();
+        fdlProxyPort.top = new FormAttachment( wProxyHost, margin );
+        fdlProxyPort.left = new FormAttachment( 0, 0 );
+        fdlProxyPort.right = new FormAttachment( middle, -margin );
+        wlProxyPort.setLayoutData( fdlProxyPort );
+        wProxyPort = new TextVar( transMeta, gProxy, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
+        wProxyPort.addModifyListener( modifiedListener );
+        wProxyPort.setToolTipText( BaseMessages.getString( PKG, "PentahoGoogleSheetsPluginOutputDialog.ProxyPort.Tooltip" ) );
+        props.setLook( wProxyPort );
+        FormData fdProxyPort = new FormData();
+        fdProxyPort.top = new FormAttachment( wProxyHost, margin );
+        fdProxyPort.left = new FormAttachment( middle, 0 );
+        fdProxyPort.right = new FormAttachment( 100, 0 );
+        wProxyPort.setLayoutData( fdProxyPort );
+
+        FormData fdProxy = new FormData();
+        fdProxy.left = new FormAttachment( 0, 0 );
+        fdProxy.right = new FormAttachment( 100, 0 );
+        fdProxy.top = new FormAttachment( testServiceAccountButton, margin );
+        gProxy.setLayoutData( fdProxy );
+
+        // END HTTP AUTH GROUP
+        // ////////////////////////
+
 
         /*
          * BEGIN Spreadsheet Tab
@@ -607,8 +673,14 @@ public class PentahoGoogleSheetsPluginOutputDialog extends BaseStepDialog implem
 
         this.shareDomain.setText(meta.getShareDomain());
 		this.privateKeyStore.setText(meta.getJsonCredentialPath());
-       
-    
+        if ( meta.getProxyHost() != null ) {
+            this.wProxyHost.setText( meta.getProxyHost() );
+        }
+        if ( meta.getProxyPort() != null ) {
+            this.wProxyPort.setText( meta.getProxyPort() );
+        }
+
+
     }
 
     private void setData(PentahoGoogleSheetsPluginOutputMeta meta) {
@@ -620,6 +692,9 @@ public class PentahoGoogleSheetsPluginOutputDialog extends BaseStepDialog implem
 		meta.setCreate(this.create.getSelection());
 		meta.setAppend(this.append.getSelection());
         meta.setShareDomain(this.shareDomain.getText());
+        meta.setProxyHost( this.wProxyHost.getText() );
+        meta.setProxyPort( this.wProxyPort.getText() );
+
 
     }
 

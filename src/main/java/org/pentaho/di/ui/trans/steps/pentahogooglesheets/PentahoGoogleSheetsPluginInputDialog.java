@@ -95,7 +95,14 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
     private TextVar worksheetId;
 	private TextVar sampleFields;
     private TableView wFields;
-	
+
+    private Label wlProxyHost;
+    private TextVar wProxyHost;
+
+    private Label wlProxyPort;
+    private TextVar wProxyPort;
+
+
     public PentahoGoogleSheetsPluginInputDialog(Shell parent, Object in, TransMeta transMeta, String name) {
         super(parent, (BaseStepMeta) in, transMeta, name);
         this.meta = (PentahoGoogleSheetsPluginInputMeta) in;
@@ -235,6 +242,65 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
         /*
          * END Service Account Tab
          */
+
+        // ////////////////////////
+        // START PROXY GROUP
+
+        Group gProxy = new Group( serviceAccountComposite, SWT.SHADOW_ETCHED_IN );
+        gProxy.setText( BaseMessages.getString( PKG, "PentahoGoogleSheetsPluginInputDialog.ProxyGroup.Label" ) );
+        FormLayout proxyLayout = new FormLayout();
+        proxyLayout.marginWidth = 3;
+        proxyLayout.marginHeight = 3;
+        gProxy.setLayout( proxyLayout );
+        props.setLook( gProxy );
+
+        // HTTP Login
+        wlProxyHost = new Label( gProxy, SWT.RIGHT );
+        wlProxyHost.setText( BaseMessages.getString( PKG, "PentahoGoogleSheetsPluginInputDialog.ProxyHost.Label" ) );
+        props.setLook( wlProxyHost );
+        FormData fdlProxyHost = new FormData();
+        fdlProxyHost.top = new FormAttachment( 0, margin );
+        fdlProxyHost.left = new FormAttachment( 0, 0 );
+        fdlProxyHost.right = new FormAttachment( middle, -margin );
+        wlProxyHost.setLayoutData( fdlProxyHost );
+        wProxyHost = new TextVar( transMeta, gProxy, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
+        wProxyHost.addModifyListener( modifiedListener );
+        wProxyHost.setToolTipText( BaseMessages.getString( PKG, "PentahoGoogleSheetsPluginInputDialog.ProxyHost.Tooltip" ) );
+        props.setLook( wProxyHost );
+        FormData fdProxyHost = new FormData();
+        fdProxyHost.top = new FormAttachment( 0, margin );
+        fdProxyHost.left = new FormAttachment( middle, 0 );
+        fdProxyHost.right = new FormAttachment( 100, 0 );
+        wProxyHost.setLayoutData( fdProxyHost );
+
+        // HTTP Password
+        wlProxyPort = new Label( gProxy, SWT.RIGHT );
+        wlProxyPort.setText( BaseMessages.getString( PKG, "PentahoGoogleSheetsPluginInputDialog.ProxyPort.Label" ) );
+        props.setLook( wlProxyPort );
+        FormData fdlProxyPort = new FormData();
+        fdlProxyPort.top = new FormAttachment( wProxyHost, margin );
+        fdlProxyPort.left = new FormAttachment( 0, 0 );
+        fdlProxyPort.right = new FormAttachment( middle, -margin );
+        wlProxyPort.setLayoutData( fdlProxyPort );
+        wProxyPort = new TextVar( transMeta, gProxy, SWT.SINGLE | SWT.LEFT | SWT.BORDER );
+        wProxyPort.addModifyListener( modifiedListener );
+        wProxyPort.setToolTipText( BaseMessages.getString( PKG, "PentahoGoogleSheetsPluginInputDialog.ProxyPort.Tooltip" ) );
+        props.setLook( wProxyPort );
+        FormData fdProxyPort = new FormData();
+        fdProxyPort.top = new FormAttachment( wProxyHost, margin );
+        fdProxyPort.left = new FormAttachment( middle, 0 );
+        fdProxyPort.right = new FormAttachment( 100, 0 );
+        wProxyPort.setLayoutData( fdProxyPort );
+
+        FormData fdProxy = new FormData();
+        fdProxy.left = new FormAttachment( 0, 0 );
+        fdProxy.right = new FormAttachment( 100, 0 );
+        fdProxy.top = new FormAttachment( testServiceAccountButton, margin );
+        gProxy.setLayoutData( fdProxy );
+
+        // END HTTP AUTH GROUP
+        // ////////////////////////
+
 
         /*
          * BEGIN Spreadsheet Tab
@@ -631,8 +697,14 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
 		this.worksheetId.setText(meta.getWorksheetId());
 		this.privateKeyStore.setText(meta.getJsonCredentialPath());
 		this.sampleFields.setText(Integer.toString(meta.getSampleFields()));
-        
-		
+
+        if ( meta.getProxyHost() != null ) {
+            wProxyHost.setText( meta.getProxyHost() );
+        }
+        if ( meta.getProxyPort() != null ) {
+            wProxyPort.setText( meta.getProxyPort() );
+        }
+
 
         for ( int i = 0; i < meta.getInputFields().length; i++ ) {
 		  PentahoGoogleSheetsPluginInputFields field = meta.getInputFields()[i];
@@ -677,7 +749,7 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
 		  }
 		  if ( trim != null ) {
 			item.setText(9, trim );
-		  }		  			
+		  }
 		}
 
 
@@ -701,7 +773,10 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
 			else {
 				meta.setSampleFields(100);
 			}
-		
+
+        meta.setProxyHost( this.wProxyHost.getText() );
+        meta.setProxyPort( this.wProxyPort.getText() );
+
         int nrNonEmptyFields = wFields.nrNonEmpty();
         meta.allocate(nrNonEmptyFields);
 
