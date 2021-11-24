@@ -98,7 +98,7 @@ public class PentahoGoogleSheetsPluginInput extends BaseStep implements StepInte
      
 	    try {
    	   	    JSON_FACTORY = JacksonFactory.getDefaultInstance();
-			HTTP_TRANSPORT=GoogleNetHttpTransport.newTrustedTransport();			
+			HTTP_TRANSPORT=PentahoGoogleSheetsPluginConnectionFactory.newTransport(meta.getProxyHost(), meta.getProxyPort());
 		} catch (Exception e) {
 			logError("Exception",e.getMessage(),e);
 		}

@@ -117,10 +117,10 @@ public class PentahoGoogleSheetsPluginOutput extends BaseStep implements StepInt
         String scope=SheetsScopes.SPREADSHEETS_READONLY;
 		Boolean exists=false;
 
-     
+
 	    try {
    	   	    JSON_FACTORY = JacksonFactory.getDefaultInstance();
-			HTTP_TRANSPORT=GoogleNetHttpTransport.newTrustedTransport();			
+			HTTP_TRANSPORT=PentahoGoogleSheetsPluginConnectionFactory.newTransport(meta.getProxyHost(), meta.getProxyPort());;
 		} catch (Exception e) {
 			logError("Exception",e.getMessage(),e);
 		}
@@ -130,7 +130,7 @@ public class PentahoGoogleSheetsPluginOutput extends BaseStep implements StepInt
 				
 				//Check if file exists
 				 try {
-                    HTTP_TRANSPORT=GoogleNetHttpTransport.newTrustedTransport();
+                    HTTP_TRANSPORT=PentahoGoogleSheetsPluginConnectionFactory.newTransport(meta.getProxyHost(), meta.getProxyPort());;
 				    APPLICATION_NAME = "pentaho-sheets";
                     JSON_FACTORY = JacksonFactory.getDefaultInstance();
                     TOKENS_DIRECTORY_PATH = Const.getKettleDirectory() +"/tokens";   
@@ -303,7 +303,7 @@ public class PentahoGoogleSheetsPluginOutput extends BaseStep implements StepInt
 
 								logBasic("Clearing range" +range +" in Spreadsheet :"+ environmentSubstitute(meta.getSpreadsheetKey()));
 								//Creating service
-								NetHttpTransport HTTP_TRANSPORT=GoogleNetHttpTransport.newTrustedTransport();
+								NetHttpTransport HTTP_TRANSPORT=PentahoGoogleSheetsPluginConnectionFactory.newTransport(meta.getProxyHost(), meta.getProxyPort());;
 								JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 								String APPLICATION_NAME = "pentaho-sheets";
 								String TOKENS_DIRECTORY_PATH = Const.getKettleDirectory() +"/tokens";

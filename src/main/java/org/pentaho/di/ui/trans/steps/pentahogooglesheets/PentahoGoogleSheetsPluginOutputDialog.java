@@ -18,6 +18,7 @@
  */
 package org.pentaho.di.ui.trans.steps.pentahogooglesheets;
 
+import org.pentaho.di.trans.steps.pentahogooglesheets.PentahoGoogleSheetsPluginConnectionFactory;
 import org.pentaho.di.trans.steps.pentahogooglesheets.PentahoGoogleSheetsPluginCredentials;
 import org.pentaho.di.trans.steps.pentahogooglesheets.PentahoGoogleSheetsPluginOutputMeta;
 
@@ -524,7 +525,7 @@ public class PentahoGoogleSheetsPluginOutputDialog extends BaseStepDialog implem
             @Override
             public void widgetSelected(SelectionEvent e) {
                 try {						
-                    NetHttpTransport HTTP_TRANSPORT=GoogleNetHttpTransport.newTrustedTransport();
+                    NetHttpTransport HTTP_TRANSPORT= PentahoGoogleSheetsPluginConnectionFactory.newTransport(meta.getProxyHost(), meta.getProxyPort());;
 				    String APPLICATION_NAME = "pentaho-sheets";
                     JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
                     String TOKENS_DIRECTORY_PATH = Const.getKettleDirectory() +"/tokens";
@@ -547,7 +548,7 @@ public class PentahoGoogleSheetsPluginOutputDialog extends BaseStepDialog implem
             @Override
             public void widgetSelected(SelectionEvent e) {
                 try {
-                    NetHttpTransport HTTP_TRANSPORT=GoogleNetHttpTransport.newTrustedTransport();
+                    NetHttpTransport HTTP_TRANSPORT=PentahoGoogleSheetsPluginConnectionFactory.newTransport(meta.getProxyHost(), meta.getProxyPort());;
 				    String APPLICATION_NAME = "pentaho-sheets";
                     JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
                     String TOKENS_DIRECTORY_PATH = Const.getKettleDirectory() +"/tokens";   
@@ -598,7 +599,7 @@ public class PentahoGoogleSheetsPluginOutputDialog extends BaseStepDialog implem
             public void widgetSelected(SelectionEvent e) {
                 try {
                   					
-					NetHttpTransport HTTP_TRANSPORT=GoogleNetHttpTransport.newTrustedTransport();
+					NetHttpTransport HTTP_TRANSPORT=PentahoGoogleSheetsPluginConnectionFactory.newTransport(meta.getProxyHost(), meta.getProxyPort());;
 				    String APPLICATION_NAME = "pentaho-sheets";
                     JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
                     String TOKENS_DIRECTORY_PATH = Const.getKettleDirectory() +"/tokens";
