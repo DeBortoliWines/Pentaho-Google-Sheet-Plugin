@@ -67,10 +67,7 @@ import org.pentaho.di.trans.step.StepDialogInterface;
 import org.pentaho.di.trans.steps.pentahogooglesheets.PentahoGoogleSheetsPluginInputFields;
 import org.pentaho.di.ui.core.dialog.EnterSelectionDialog;
 import org.pentaho.di.ui.core.dialog.ErrorDialog;
-import org.pentaho.di.ui.core.widget.ColumnInfo;
-import org.pentaho.di.ui.core.widget.ComboValuesSelectionListener;
-import org.pentaho.di.ui.core.widget.TableView;
-import org.pentaho.di.ui.core.widget.TextVar;
+import org.pentaho.di.ui.core.widget.*;
 import org.pentaho.di.ui.trans.step.BaseStepDialog;
 import org.pentaho.di.core.variables.Variables;
 
@@ -102,6 +99,11 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
 
     private Label wlProxyPort;
     private TextVar wProxyPort;
+
+    private Label wlProxyType;
+    private ComboVar wProxyType;
+    private FormData fdlProxyType, fdProxyType;
+
 
 
     public PentahoGoogleSheetsPluginInputDialog(Shell parent, Object in, TransMeta transMeta, String name) {
@@ -255,12 +257,34 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
         gProxy.setLayout( proxyLayout );
         props.setLook( gProxy );
 
+        // ProxyType Line
+        wlProxyType = new Label( gProxy, SWT.RIGHT );
+        wlProxyType.setText( BaseMessages.getString( PKG, "PentahoGoogleSheetsPluginInputDialog.ProxyType.Label" ) );
+        props.setLook( wlProxyType );
+        fdlProxyType = new FormData();
+        fdlProxyType.left = new FormAttachment( 0, 0 );
+        fdlProxyType.right = new FormAttachment( middle, 0 );
+        fdlProxyType.top = new FormAttachment( 0, margin );
+        wlProxyType.setLayoutData( fdlProxyType );
+
+        wProxyType = new ComboVar( transMeta, gProxy, SWT.BORDER | SWT.READ_ONLY );
+        wProxyType.setEditable( true );
+        props.setLook( wProxyType );
+        wProxyType.addModifyListener( modifiedListener );
+        fdProxyType = new FormData();
+        fdProxyType.left = new FormAttachment( middle, 0 );
+        fdProxyType.top = new FormAttachment( 0, margin );
+        fdProxyType.right = new FormAttachment( 100, 0 );
+        wProxyType.setLayoutData( fdProxyType );
+        wProxyType.setItems( PentahoGoogleSheetsPluginConnectionFactory.PROXY_TYPES );
+
+
         // HTTP Login
         wlProxyHost = new Label( gProxy, SWT.RIGHT );
         wlProxyHost.setText( BaseMessages.getString( PKG, "PentahoGoogleSheetsPluginInputDialog.ProxyHost.Label" ) );
         props.setLook( wlProxyHost );
         FormData fdlProxyHost = new FormData();
-        fdlProxyHost.top = new FormAttachment( 0, margin );
+        fdlProxyHost.top = new FormAttachment( wProxyType, margin );
         fdlProxyHost.left = new FormAttachment( 0, 0 );
         fdlProxyHost.right = new FormAttachment( middle, -margin );
         wlProxyHost.setLayoutData( fdlProxyHost );
@@ -269,7 +293,7 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
         wProxyHost.setToolTipText( BaseMessages.getString( PKG, "PentahoGoogleSheetsPluginInputDialog.ProxyHost.Tooltip" ) );
         props.setLook( wProxyHost );
         FormData fdProxyHost = new FormData();
-        fdProxyHost.top = new FormAttachment( 0, margin );
+        fdProxyHost.top = new FormAttachment( wProxyType, margin );
         fdProxyHost.left = new FormAttachment( middle, 0 );
         fdProxyHost.right = new FormAttachment( 100, 0 );
         wProxyHost.setLayoutData( fdProxyHost );
@@ -552,7 +576,7 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
             @Override
             public void widgetSelected(SelectionEvent e) {
                 try {						
-                    NetHttpTransport HTTP_TRANSPORT= PentahoGoogleSheetsPluginConnectionFactory.newTransport(meta.getProxyHost(), meta.getProxyPort());;
+                    NetHttpTransport HTTP_TRANSPORT= PentahoGoogleSheetsPluginConnectionFactory.newTransport(wProxyType.getText(), wProxyHost.getText(), wProxyPort.getText());
 				    String APPLICATION_NAME = "pentaho-sheets";
                     JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
                     String TOKENS_DIRECTORY_PATH = Const.getKettleDirectory() +"/tokens";
@@ -575,7 +599,7 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
             @Override
             public void widgetSelected(SelectionEvent e) {
                 try {
-                    NetHttpTransport HTTP_TRANSPORT=PentahoGoogleSheetsPluginConnectionFactory.newTransport(meta.getProxyHost(), meta.getProxyPort());;
+                    NetHttpTransport HTTP_TRANSPORT=PentahoGoogleSheetsPluginConnectionFactory.newTransport(wProxyType.getText(), wProxyHost.getText(), wProxyPort.getText());;
 				    String APPLICATION_NAME = "pentaho-sheets";
                     JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
                     String TOKENS_DIRECTORY_PATH = Const.getKettleDirectory() +"/tokens";   
@@ -624,7 +648,7 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
             public void widgetSelected(SelectionEvent e) {
                 try {
                   					
-					NetHttpTransport HTTP_TRANSPORT=PentahoGoogleSheetsPluginConnectionFactory.newTransport(meta.getProxyHost(), meta.getProxyPort());;
+					NetHttpTransport HTTP_TRANSPORT=PentahoGoogleSheetsPluginConnectionFactory.newTransport(wProxyType.getText(), wProxyHost.getText(), wProxyPort.getText());;
 				    String APPLICATION_NAME = "pentaho-sheets";
                     JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
                     String TOKENS_DIRECTORY_PATH = Const.getKettleDirectory() +"/tokens";
@@ -698,6 +722,9 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
 		this.worksheetId.setText(meta.getWorksheetId());
 		this.privateKeyStore.setText(meta.getJsonCredentialPath());
 		this.sampleFields.setText(Integer.toString(meta.getSampleFields()));
+
+
+       wProxyType.setText( Const.NVL( meta.getProxyType(), PentahoGoogleSheetsPluginConnectionFactory.PROXY_TYPE_DIRECT ) );
 
         if ( meta.getProxyHost() != null ) {
             wProxyHost.setText( meta.getProxyHost() );
@@ -775,6 +802,7 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
 				meta.setSampleFields(100);
 			}
 
+        meta.setProxyType( this.wProxyType.getText() );
         meta.setProxyHost( this.wProxyHost.getText() );
         meta.setProxyPort( this.wProxyPort.getText() );
 
@@ -844,7 +872,7 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
         try {
             PentahoGoogleSheetsPluginInputMeta meta = new PentahoGoogleSheetsPluginInputMeta();
             setData(meta);
-            NetHttpTransport HTTP_TRANSPORT=PentahoGoogleSheetsPluginConnectionFactory.newTransport(meta.getProxyHost(), meta.getProxyPort());;
+            NetHttpTransport HTTP_TRANSPORT=PentahoGoogleSheetsPluginConnectionFactory.newTransport(wProxyType.getText(), wProxyHost.getText(), wProxyPort.getText());;
 			String APPLICATION_NAME = "pentaho-sheets";
             JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
             String TOKENS_DIRECTORY_PATH = "tokens";

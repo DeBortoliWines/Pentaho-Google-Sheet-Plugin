@@ -103,7 +103,11 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
     @Injection( name = "Append", group = "SHEET" )
 	private Boolean append;
 
+
     /** proxy **/
+    @Injection( name = "proxyType", group = "SHEET" )
+    private String proxyType;
+
     @Injection( name = "proxyHost", group = "SHEET" )
     private String proxyHost;
 
@@ -182,6 +186,15 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
         this.worksheetId = id;
     }
 
+    public void setProxyType( String proxyType ) {
+        this.proxyType = proxyType;
+    }
+
+    public String getProxyType() {
+        return this.proxyType;
+    }
+
+
     public void setProxyHost( String proxyHost ) {
         this.proxyHost = proxyHost;
     }
@@ -223,6 +236,7 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
             xml.append(XMLHandler.addTagValue( "APPEND", Boolean.toString(this.append)));
 			xml.append(XMLHandler.addTagValue("SHAREEMAIL", this.shareEmail));	
             xml.append(XMLHandler.addTagValue("SHAREDOMAIN", this.shareDomain));
+            xml.append( XMLHandler.addTagValue( "proxyType", proxyType ) );
             xml.append( XMLHandler.addTagValue( "proxyHost", proxyHost ) );
             xml.append( XMLHandler.addTagValue( "proxyPort", proxyPort ) );
 
@@ -242,6 +256,7 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
 			this.append= Boolean.parseBoolean( XMLHandler.getTagValue( stepnode,"APPEND" ));
 			this.shareEmail= XMLHandler.getTagValue(stepnode,"SHAREEMAIL" );
             this.shareDomain= XMLHandler.getTagValue(stepnode,"SHAREDOMAIN" );
+            this.proxyType = XMLHandler.getTagValue( stepnode, "proxyType" );
             this.proxyHost = XMLHandler.getTagValue( stepnode, "proxyHost" );
             this.proxyPort = XMLHandler.getTagValue( stepnode, "proxyPort" );
 
@@ -261,6 +276,7 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
 			this.shareDomain=rep.getStepAttributeString(id_step, "SHAREDOMAIN");
 			this.create=Boolean.parseBoolean( rep.getStepAttributeString( id_step, "CREATE" ));
 			this.append=Boolean.parseBoolean( rep.getStepAttributeString( id_step, "APPEND" ));
+            this.proxyType = rep.getStepAttributeString( id_step, "proxyType" );
             this.proxyHost = rep.getStepAttributeString( id_step, "proxyHost" );
             this.proxyPort = rep.getStepAttributeString( id_step, "proxyPort" );
 
@@ -288,6 +304,7 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
 			if ( this.append != null ) {
               rep.saveStepAttribute( id_transformation, id_step, "APPEND", this.append );
 			}
+            rep.saveStepAttribute( id_transformation, id_step, "proxyType", proxyType );
             rep.saveStepAttribute( id_transformation, id_step, "proxyHost", proxyHost );
             rep.saveStepAttribute( id_transformation, id_step, "proxyPort", proxyPort );
 

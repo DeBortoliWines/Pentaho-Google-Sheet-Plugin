@@ -12,16 +12,23 @@ import java.net.Proxy;
 
 public class PentahoGoogleSheetsPluginConnectionFactory {
 
-    static NetHttpTransport newProxyTransport(String proxyHost, int proxyPort) throws GeneralSecurityException, IOException {
+    public static final String[] PROXY_TYPES = new String[] { "DIRECT", "HTTP", "SOCKS" };
+
+    public static final String PROXY_TYPE_DIRECT = "DIRECT";
+    public static final String PROXY_TYPE_HTTP = "HTTP";
+    public static final String PROXY_TYPE_SOCKS = "SOCKS";
+
+    static NetHttpTransport newProxyTransport(String proxyType, String proxyHost, int proxyPort) throws GeneralSecurityException, IOException {
         NetHttpTransport.Builder builder = new NetHttpTransport.Builder();
-        builder.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)));
+        builder.setProxy(new Proxy(Proxy.Type.valueOf(proxyType), new InetSocketAddress(proxyHost, proxyPort)));
         return builder.build();
     }
 
-    public static NetHttpTransport newTransport(String proxyHost, String proxyPort) throws GeneralSecurityException, IOException {
-        if ( proxyHost != null && proxyPort != null ) {
+    public static NetHttpTransport newTransport(String proxyType, String proxyHost, String proxyPort) throws GeneralSecurityException, IOException, NumberFormatException {
+        if (proxyType == null || proxyType.isEmpty()) proxyType = PROXY_TYPE_DIRECT;
+        if ( !proxyType.equalsIgnoreCase(PROXY_TYPE_DIRECT) ) {
             Integer port = new Integer(proxyPort);
-            return newProxyTransport(proxyHost, port);
+            return newProxyTransport(proxyType, proxyHost, port);
         } else {
             return GoogleNetHttpTransport.newTrustedTransport();
         }
