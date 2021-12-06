@@ -581,7 +581,7 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
                     JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
                     String TOKENS_DIRECTORY_PATH = Const.getKettleDirectory() +"/tokens";
 					String scope=SheetsScopes.SPREADSHEETS_READONLY;
-					Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,transMeta.environmentSubstitute(privateKeyStore.getText()))).setApplicationName(APPLICATION_NAME).build();
+					Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,transMeta.environmentSubstitute(privateKeyStore.getText()),  HTTP_TRANSPORT, JSON_FACTORY)).setApplicationName(APPLICATION_NAME).build();
                     testServiceAccountInfo.setText("");
                     
                     if (service == null) {
@@ -604,7 +604,7 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
                     JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
                     String TOKENS_DIRECTORY_PATH = Const.getKettleDirectory() +"/tokens";   
 					String scope="https://www.googleapis.com/auth/drive.readonly";
-					Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,transMeta.environmentSubstitute(privateKeyStore.getText()))).setApplicationName(APPLICATION_NAME).build();
+					Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,transMeta.environmentSubstitute(privateKeyStore.getText()),  HTTP_TRANSPORT, JSON_FACTORY)).setApplicationName(APPLICATION_NAME).build();
 
                     FileList result = service.files().list().setSupportsAllDrives(true).setIncludeItemsFromAllDrives(true).setQ("mimeType='application/vnd.google-apps.spreadsheet'").setPageSize(100).setFields("nextPageToken, files(id, name)").execute();
                     List<File> spreadsheets = result.getFiles();
@@ -654,7 +654,7 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
                     String TOKENS_DIRECTORY_PATH = Const.getKettleDirectory() +"/tokens";
 					String scope=SheetsScopes.SPREADSHEETS_READONLY;
 					
-					Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,transMeta.environmentSubstitute(privateKeyStore.getText()))).setApplicationName(APPLICATION_NAME).build();
+					Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,transMeta.environmentSubstitute(privateKeyStore.getText()),  HTTP_TRANSPORT, JSON_FACTORY)).setApplicationName(APPLICATION_NAME).build();
 					Spreadsheet response1= service.spreadsheets().get(transMeta.environmentSubstitute(spreadsheetKey.getText())).setIncludeGridData(false).execute();
 
                     
@@ -879,7 +879,7 @@ public class PentahoGoogleSheetsPluginInputDialog extends BaseStepDialog impleme
 			String scope=SheetsScopes.SPREADSHEETS_READONLY;
             wFields.table.removeAll();
 			
-			Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,transMeta.environmentSubstitute(privateKeyStore.getText()))).setApplicationName(APPLICATION_NAME).build();
+			Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,transMeta.environmentSubstitute(privateKeyStore.getText()),  HTTP_TRANSPORT, JSON_FACTORY)).setApplicationName(APPLICATION_NAME).build();
 			//Fill in sample in order to guess types
 			
 			

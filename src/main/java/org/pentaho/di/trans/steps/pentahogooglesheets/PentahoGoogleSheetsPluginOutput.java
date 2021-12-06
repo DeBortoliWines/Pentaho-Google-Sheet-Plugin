@@ -135,7 +135,7 @@ public class PentahoGoogleSheetsPluginOutput extends BaseStep implements StepInt
                     JSON_FACTORY = JacksonFactory.getDefaultInstance();
                     TOKENS_DIRECTORY_PATH = Const.getKettleDirectory() +"/tokens";   
 					scope="https://www.googleapis.com/auth/drive";
-					Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,environmentSubstitute(meta.getJsonCredentialPath()))).setApplicationName(APPLICATION_NAME).build();
+					Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,environmentSubstitute(meta.getJsonCredentialPath()), HTTP_TRANSPORT, JSON_FACTORY)).setApplicationName(APPLICATION_NAME).build();
                     String wsID=environmentSubstitute(meta.getSpreadsheetKey());
 					//"properties has { key='id' and value='"+wsID+"'}";
 					String q="mimeType='application/vnd.google-apps.spreadsheet'";
@@ -158,7 +158,7 @@ public class PentahoGoogleSheetsPluginOutput extends BaseStep implements StepInt
 						if(!meta.getAppend()){ //si append + create alors erreur
 						 //Init Service
 					    scope="https://www.googleapis.com/auth/spreadsheets";
-					    data.service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,environmentSubstitute(meta.getJsonCredentialPath()))).setApplicationName(APPLICATION_NAME).build();
+					    data.service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,environmentSubstitute(meta.getJsonCredentialPath()), HTTP_TRANSPORT, JSON_FACTORY)).setApplicationName(APPLICATION_NAME).build();
 						
 						//If it does not exist create it.
 						Spreadsheet spreadsheet = new Spreadsheet().setProperties(new SpreadsheetProperties().setTitle(wsID));
@@ -308,7 +308,7 @@ public class PentahoGoogleSheetsPluginOutput extends BaseStep implements StepInt
 								String APPLICATION_NAME = "pentaho-sheets";
 								String TOKENS_DIRECTORY_PATH = Const.getKettleDirectory() +"/tokens";
 								String scope=SheetsScopes.SPREADSHEETS;
-								data.service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,environmentSubstitute(meta.getJsonCredentialPath()))).setApplicationName(APPLICATION_NAME).build();
+								data.service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,environmentSubstitute(meta.getJsonCredentialPath()), HTTP_TRANSPORT, JSON_FACTORY)).setApplicationName(APPLICATION_NAME).build();
 								
 								
 								if(!meta.getAppend()) //if Append is not checked we clear the sheet and we write content

@@ -18,6 +18,7 @@
  */
 package org.pentaho.di.trans.steps.pentahogooglesheets;
 
+import com.google.api.client.http.HttpTransport;
 import org.pentaho.di.core.vfs.KettleVFS;
 import org.pentaho.di.core.exception.KettleFileException;
 import org.pentaho.di.core.exception.KettleException;
@@ -71,7 +72,7 @@ public class PentahoGoogleSheetsPluginCredentials {
 
 
 	
-	public static Credential getCredentialsJson(String scope,String jsonCredentialPath) throws IOException {
+	public static Credential getCredentialsJson(String scope, String jsonCredentialPath, HttpTransport transport, JsonFactory jsonFactory) throws IOException {
             
 			Credential credential=null;
 	        //InputStream in = PentahoGoogleSheetsPluginCredentials.class.getResourceAsStream("/plugins/pentaho-googledrive-vfs/credentials/client_secret.json");//pentaho-sheets-261911-18ce0057e3d3.json
@@ -86,7 +87,7 @@ public class PentahoGoogleSheetsPluginCredentials {
 			if (in == null) {
                throw new FileNotFoundException("Resource not found:"+ jsonCredentialPath);			   
             }
-			credential = GoogleCredential.fromStream(in).createScoped(Collections.singleton(scope));
+			credential = GoogleCredential.fromStream(in, transport, jsonFactory ).createScoped(Collections.singleton(scope));
             return credential;
 	}
 	
