@@ -308,7 +308,7 @@ public class PentahoGoogleSheetsPluginOutput extends BaseStep implements StepInt
 								String APPLICATION_NAME = "pentaho-sheets";
 								String TOKENS_DIRECTORY_PATH = Const.getKettleDirectory() +"/tokens";
 								String scope=SheetsScopes.SPREADSHEETS;
-								data.service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,environmentSubstitute(meta.getJsonCredentialPath()), HTTP_TRANSPORT, JSON_FACTORY)).setApplicationName(APPLICATION_NAME).build();
+								data.service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, new PentahoGoogleSheetsRequestInitializer(PentahoGoogleSheetsPluginCredentials.getCredentialsJson(scope,environmentSubstitute(meta.getJsonCredentialPath()), HTTP_TRANSPORT, JSON_FACTORY))).setApplicationName(APPLICATION_NAME).build();
 								
 								
 								if(!meta.getAppend()) //if Append is not checked we clear the sheet and we write content
