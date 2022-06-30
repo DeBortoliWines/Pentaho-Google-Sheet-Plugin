@@ -54,6 +54,9 @@ If you type in a sheet name (that does not exist in the drive) it will attempt t
 * Append checkbox : 
 Appends the lines **without the header** to an existing spreadsheet. This is incompatible with the *create* option below.
 
+* Raw output checkbox :
+If the checkbox is checked, all data will be output to Sheets as strings instead of using *smart* data types.
+
 * Create sheet if it does not exist checkbox : 
 If the checkbox is checked then if the Spreadsheet Key specified in the field Spreadsheet key does not exist it will create a new spreadsheet within the service account drive (note that this account has no UI)
 

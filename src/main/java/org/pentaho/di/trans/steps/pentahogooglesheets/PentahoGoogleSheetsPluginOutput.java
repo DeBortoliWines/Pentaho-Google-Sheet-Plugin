@@ -322,13 +322,24 @@ public class PentahoGoogleSheetsPluginOutput extends BaseStep implements StepInt
 									//Writing Sheet
 									logBasic("Writing to Sheet");
 									ValueRange body = new ValueRange().setValues(data.rows);
-									String valueInputOption="USER_ENTERED";
+
+									String valueInputOption;
+									if (!meta.getRaw()) {
+										valueInputOption = "USER_ENTERED";
+									} else {
+										valueInputOption = "RAW";
+									}
 									UpdateValuesResponse result = data.service.spreadsheets().values().update(environmentSubstitute(meta.getSpreadsheetKey()), range, body).setValueInputOption(valueInputOption).execute();								
 								
 								} else { //Appending if option is checked
 
 									// How the input data should be interpreted.
-									String valueInputOption = "USER_ENTERED"; // TODO: Update placeholder value.
+									String valueInputOption;
+									if (!meta.getRaw()) {
+										valueInputOption = "USER_ENTERED";
+									} else {
+										valueInputOption = "RAW";
+									}
 
 									// How the input data should be inserted.
 									String insertDataOption = "INSERT_ROWS"; // TODO: Update placeholder value.

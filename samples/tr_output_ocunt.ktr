@@ -463,6 +463,7 @@
     <spreadsheetKey>1td1yBSzRI1e8FtNVe85bPA9ZTebZe7kY1SDywP7won4</spreadsheetKey>
     <CREATE>false</CREATE>
     <APPEND>false</APPEND>
+    <RAW>true</RAW>
     <SHAREEMAIL/>
     <SHAREDOMAIN/>
     <attributes/>

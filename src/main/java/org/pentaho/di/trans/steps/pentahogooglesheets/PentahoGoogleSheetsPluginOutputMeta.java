@@ -103,6 +103,9 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
     @Injection( name = "Append", group = "SHEET" )
 	private Boolean append;
 
+    @Injection( name = "Raw", group = "SHEET" )
+    private Boolean raw;
+
 
     /** proxy **/
     @Injection( name = "proxyType", group = "SHEET" )
@@ -124,6 +127,7 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
 		this.shareEmail = ""; 
 		this.create=false;
 		this.append=false;
+		this.raw=true;
     }
 		
    /* public String getDialogClassName() {
@@ -178,6 +182,14 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
         return this.append == null ? false : this.append;
     }
 
+    public void setRaw(Boolean raw) {
+        this.raw = raw;
+    }
+
+    public Boolean getRaw() {
+        return this.raw == null ? false : this.raw;
+    }
+
     public String getWorksheetId() {
         return this.worksheetId == null ? "" : this.worksheetId;
     }
@@ -220,6 +232,7 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
         retval.setWorksheetId(this.worksheetId);
 		retval.setCreate(this.create);
 		retval.setAppend(this.append);
+		retval.setRaw(this.raw);
 		retval.setShareEmail(this.shareEmail);
 	    retval.setShareDomain(this.shareDomain);
         return retval;
@@ -234,6 +247,7 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
 			xml.append(XMLHandler.addTagValue("spreadsheetKey", this.spreadsheetKey));
      		xml.append(XMLHandler.addTagValue( "CREATE", Boolean.toString(this.create)));
             xml.append(XMLHandler.addTagValue( "APPEND", Boolean.toString(this.append)));
+            xml.append(XMLHandler.addTagValue( "RAW", Boolean.toString(this.raw)));
 			xml.append(XMLHandler.addTagValue("SHAREEMAIL", this.shareEmail));	
             xml.append(XMLHandler.addTagValue("SHAREDOMAIN", this.shareDomain));
             xml.append( XMLHandler.addTagValue( "proxyType", proxyType ) );
@@ -254,6 +268,7 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
             this.spreadsheetKey = XMLHandler.getTagValue(stepnode, "spreadsheetKey");
 			this.create= Boolean.parseBoolean( XMLHandler.getTagValue( stepnode,"CREATE" ));
 			this.append= Boolean.parseBoolean( XMLHandler.getTagValue( stepnode,"APPEND" ));
+            this.raw= Boolean.parseBoolean( XMLHandler.getTagValue( stepnode,"RAW" ));
 			this.shareEmail= XMLHandler.getTagValue(stepnode,"SHAREEMAIL" );
             this.shareDomain= XMLHandler.getTagValue(stepnode,"SHAREDOMAIN" );
             this.proxyType = XMLHandler.getTagValue( stepnode, "proxyType" );
@@ -276,6 +291,7 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
 			this.shareDomain=rep.getStepAttributeString(id_step, "SHAREDOMAIN");
 			this.create=Boolean.parseBoolean( rep.getStepAttributeString( id_step, "CREATE" ));
 			this.append=Boolean.parseBoolean( rep.getStepAttributeString( id_step, "APPEND" ));
+            this.raw=Boolean.parseBoolean( rep.getStepAttributeString( id_step, "RAW" ));
             this.proxyType = rep.getStepAttributeString( id_step, "proxyType" );
             this.proxyHost = rep.getStepAttributeString( id_step, "proxyHost" );
             this.proxyPort = rep.getStepAttributeString( id_step, "proxyPort" );
@@ -304,6 +320,9 @@ public class PentahoGoogleSheetsPluginOutputMeta extends BaseStepMeta implements
 			if ( this.append != null ) {
               rep.saveStepAttribute( id_transformation, id_step, "APPEND", this.append );
 			}
+            if ( this.raw != null ) {
+              rep.saveStepAttribute( id_transformation, id_step, "RAW", this.raw );
+            }
             rep.saveStepAttribute( id_transformation, id_step, "proxyType", proxyType );
             rep.saveStepAttribute( id_transformation, id_step, "proxyHost", proxyHost );
             rep.saveStepAttribute( id_transformation, id_step, "proxyPort", proxyPort );
