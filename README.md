@@ -66,6 +66,18 @@ That is why the Share with user email field let’s you specify the email of a u
 * Domain Wise Permission : 
 Enables to share with your whole domain (if configured in Google Drive). For security concerns I share only with READ rights.
 
+#### Specify Cell Range
+You can specify a cell range to write data in. If you leave it blank, the step will write from A1.
+If you specify a range, the step will write from the first cell of the range.
+
+**e.g.**
+
+* `Sheet1!A10:ZZ` will write from A10 to ZZ
+
+* `Sheet1!A:A` will write only in column A
+
+* `Sheet1!B:Z` will write from B to Z
+
 
 ![enter image description here](https://raw.githubusercontent.com/jfmonteil/Pentaho-Google-Sheet-Plugin/master/screenshots/PentahoGoogleSheetOut-Spreadsheet.png)
 
